@@ -1,8 +1,15 @@
 const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
+
+morgan.token("body", (req, res) => JSON.stringify(req.body) ?? "");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
 
 const weeks = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"];
 
@@ -108,7 +115,7 @@ app.post("/api/persons", (req, res) => {
   const id = Math.floor(Math.random() * 100000);
   personsObj[id] = { id, name, number };
   persons = tranObjToArray(personsObj);
-  res.status(201).end();
+  res.json(personsObj[id]).status(201).end();
 });
 
 app.get("/api/persons/:id", (req, res) => {
