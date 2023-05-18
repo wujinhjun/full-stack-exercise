@@ -57,21 +57,21 @@ const App = () => {
       ) {
         event.preventDefault();
         obj.id = findPerson(obj.name)[0].id;
-        personsObj.current[obj.id] = obj;
-        setPersons(tranObjToArr(personsObj.current));
 
         let tempMsg = {};
 
         try {
-          await networkService.updateItem(obj);
+          const data = await networkService.updateItem(obj);
+          tempMsg = { status: "success", message: `Updated ${obj.name}` };
+          personsObj.current[obj.id] = data;
+          setPersons(tranObjToArr(personsObj.current));
         } catch (error) {
-          console.log(error);
           tempMsg = {
             status: "error",
             message: `Information of ${obj.name} has already been removed from server`,
           };
-          setMessage(tempMsg);
         } finally {
+          setMessage(tempMsg);
           setTimeout(() => {
             setMessage({});
           }, 3000);
@@ -81,25 +81,30 @@ const App = () => {
       }
     } else {
       event.preventDefault();
-      obj.id = persons.length + 1;
-      setPersons(persons.concat(obj));
 
       let tempMsg = {};
 
       try {
         await networkService.createItem(obj);
         tempMsg = { status: "success", message: `Added ${obj.name}` };
-        setMessage(tempMsg);
+        setPersons(persons.concat(obj));
       } catch (error) {
-        tempMsg = {
-          success: "error",
-          message: `Information of ${obj.name} has already been removed from server`,
-        };
-        setMessage(tempMsg);
+        if (error.response?.data?.type === "ValidationError") {
+          tempMsg = {
+            status: "error",
+            message: error.response.data.error,
+          };
+        } else {
+          tempMsg = {
+            status: "error",
+            message: `Information of ${obj.name} has already been removed from server`,
+          };
+        }
       } finally {
+        setMessage(tempMsg);
         setTimeout(() => {
           setMessage({});
-        }, 3000);
+        }, 6000);
       }
 
       resetInput();

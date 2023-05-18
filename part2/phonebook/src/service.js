@@ -17,8 +17,8 @@ const deleteItem = async (id) => {
 };
 
 const updateItem = async (newItem) => {
-  console.log(newItem.id);
-  await axios.put(`${baseUrl}/${newItem.id}`, newItem);
+  const res = await axios.put(`${baseUrl}/${newItem.id}`, newItem);
+  return res.data;
 };
 
 const networkService = {
