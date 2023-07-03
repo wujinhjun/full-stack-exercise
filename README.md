@@ -10,4 +10,6 @@ The frontend for phonebook in the Part3
 
 ## [part3](https://github.com/wujinhjun/full-stack-phonebook-backend.git)
 
-## [part4](https://github.com/wujinhjun/full-stack-open-backend-blogs.git)
+## [part4](https://github.com/wujinhjun/full-stack-open-backend-blogs/tree/main/backend)
+
+## [Part5](https://github.com/wujinhjun/full-stack-open-backend-blogs/tree/main/frontend)
